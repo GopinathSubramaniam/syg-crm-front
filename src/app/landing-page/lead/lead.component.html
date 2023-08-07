@@ -1,0 +1,506 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col text-end">
+                <button class="btn btn-danger" (click)="deleteConfirm($event)">Delete</button>
+                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modal-mail-send">Send
+                    Mail</button>
+                <button class="btn btn-primary" (click)="tagsDialog = true">Add
+                    Tags</button>
+                <button class="btn btn-primary" (click)="taskFormVisible = true">Create Task</button>
+                <p-splitButton id="splitBtn" label="Action" styleClass="p-button-sm" [model]="actions"></p-splitButton>
+                <button (click)="sidebarVisible = true" class="btn btn-primary">Create Lead </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="card h-100">
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            <h4>FILTERS</h4>
+                            <div class="input-icon">
+                                <span class="input-icon-addon">
+                                    <span class="mdi mdi-magnify"></span>
+                                </span>
+                                <input #searchInput type="text" class="form-control" placeholder="Search…"
+                                    aria-label="Search in website" [(ngModel)]="filter.searchTxt"
+                                    (keyup.enter)="search()">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accordion" id="accordion-example">
+                                <div class="accordion-item border-0">
+                                    <h2 class="accordion-header" id="heading-1">
+                                        <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-1" aria-expanded="true">
+                                            System Defined Filters
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-1" class="accordion-collapse collapse show"
+                                        data-bs-parent="#accordion-example">
+                                        <div class="accordion-body pt-0">
+                                            <label class="form-check">
+                                                <input class="form-check-input" #optionNew type="checkbox"
+                                                    (change)="check('N')">
+                                                <span class="form-check-label">New</span>
+                                            </label>
+                                            <label class="form-check">
+                                                <input class="form-check-input" #optionOwn type="checkbox"
+                                                    (change)="check('O')">
+                                                <span class="form-check-label">Own</span>
+                                            </label>
+                                            <label class="form-check">
+                                                <input class="form-check-input" #optionLoss type="checkbox"
+                                                    (change)="check('L')">
+                                                <span class="form-check-label">Loss</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <p-table [value]="leads.data" [paginator]="true" [lazy]="true" [rows]="10"
+                            [showCurrentPageReport]="true" [loading]="loading" [totalRecords]="leads.totalRecords"
+                            (onLazyLoad)="nextPage($event)" [(selection)]="selectedRows">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th class="fs-5">UPDATED DATE</th>
+                                    <th class="fs-5">NAME</th>
+                                    <th class="fs-5">BRANCH</th>
+                                    <th class="fs-5">EMAIL</th>
+                                    <th class="fs-5">LEAD SOURCE</th>
+                                    <th class="fs-5">LEAD OWNER</th>
+                                    <th class="fs-5">CITY</th>
+                                    <th class="fs-5">STATE</th>
+                                    <th class="fs-5">ACTION</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-lead>
+                                <tr>
+                                    <td>
+                                        <p-tableCheckbox [value]="lead"></p-tableCheckbox>
+                                    </td>
+                                    <td class="fs-4">{{ lead.updatedDate | date: 'dd/MM/yy h:mm a' }}</td>
+                                    <td class="fs-4">
+                                        <span *ngIf="!lead.status || lead.status == 'N'"
+                                            class="mdi mdi-checkbox-marked-circle-auto-outline text-default"></span>
+                                        <span *ngIf="lead.status == 'O'"
+                                            class="mdi mdi-check-circle text-success"></span>
+                                        <span *ngIf="lead.status == 'L'"
+                                            class="mdi mdi-close-circle text-danger"></span>
+
+                                        {{ lead.firstName }}
+                                    </td>
+                                    <td class="fs-4">{{ lead.userDetail.branch.name }}</td>
+                                    <td class="fs-4">{{ lead.email }}</td>
+                                    <td class="fs-4">{{ lead.leadSource }}</td>
+                                    <td class="fs-4">{{ lead.userDetail.firstName }}</td>
+                                    <td class="fs-4">{{ lead.city }}</td>
+                                    <td class="fs-4">{{ lead.state }}</td>
+                                    <td>
+                                        <button class="btn btn-secondary btn-sm px-2" (click)="edit(lead.id)">
+                                            <span class="mdi mdi-circle-edit-outline"></span>&nbsp;Edit
+                                        </button>
+                                        <button class="btn btn-primary btn-sm px-2" (click)="view(lead.id)">
+                                            <span class="mdi mdi-open-in-new"></span>&nbsp;View
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <!-- <ng-template pTemplate="paginatorleft">
+                                <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+                            </ng-template>
+                            <ng-template pTemplate="paginatorright">
+                                <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+                            </ng-template> -->
+                        </p-table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-lg" [(visible)]="sidebarVisible" position="right" (onHide)="leadForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{leadForm.get('id')?.value ? 'Update ': 'New '}} Lead</h2>
+        </div>
+        <div class="col text-end">
+            <!-- <button type=" button" class="btn btn-secondary" (click)="sidebarVisible = false">Cancel</button> -->
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{leadForm.get('id')?.value ? 'Update': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="leadForm" class="form" autocomplete="off" novalidate>
+            <div class="card my-3">
+                <div class="card-body p-2 bg-primary text-white">
+                    Lead Information
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="hidden" formControlName="id">
+                    <div class="mb-3" formGroupName="userDetail">
+                        <label class="form-label">Lead Owner</label>
+                        <select formControlName="id" class="form-control">
+                            <option value="">Select Lead Owner</option>
+                            <option *ngFor="let u of users" value="{{u.userDetail.id}}">{{u.userDetail.userCode}} -
+                                {{u.userDetail.firstName}}</option>
+                        </select>
+
+                        <!-- <input type="text" class="form-control" placeholder="Lead Owner"> -->
+                        <div class="text-danger"
+                            *ngIf="leadForm.get('userDetail')?.dirty ||leadForm.get('userDetail')?.touched">
+                            <div [hidden]="!leadForm.get('userDetail')?.errors?.['required']">
+                                Lead Owner is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
+                        <div class="text-danger"
+                            *ngIf="leadForm.get('firstName')?.dirty ||leadForm.get('firstName')?.touched">
+                            <div [hidden]="!leadForm.get('firstName')?.errors?.['required']">
+                                First Name is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" formControlName="email" placeholder="Email">
+                        <div class="text-danger" *ngIf="leadForm.get('email')?.dirty ||leadForm.get('email')?.touched">
+                            <div [hidden]="!leadForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Lead Source</label>
+                        <select class="form-control" formControlName="leadSource">
+                            <option value="GOOGLE">Google</option>
+                            <option value="FACEBOOK">Facebook</option>
+                            <option value="TWITTER">Twitter</option>
+                            <option value="INSTAGRAM">Instagram</option>
+                            <option value="OTHER">Other</option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="leadForm.get('leadSource')?.dirty ||leadForm.get('leadSource')?.touched">
+                            <div [hidden]="!leadForm.get('leadSource')?.errors?.['required']">
+                                Lead Source is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Mobile</label>
+                        <input type="text" class="form-control" formControlName="mobile" placeholder="Mobile">
+                        <div class="text-danger"
+                            *ngIf="leadForm.get('leadOwner')?.dirty ||leadForm.get('leadOwner')?.touched">
+                            <div [hidden]="!leadForm.get('leadOwner')?.errors?.['required']">
+                                Phone is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- </> -->
+
+            <!-- <> Address Information -->
+            <div class="card mb-3">
+                <div class="card-body p-2 bg-primary text-white">
+                    Address Information
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Street</label>
+                        <input type="text" class="form-control" formControlName="street" placeholder="Street">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" formControlName="state" placeholder="State">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Country</label>
+                        <input type="text" class="form-control" formControlName="country" placeholder="Country">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" formControlName="city" placeholder="City">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Zip Code</label>
+                        <input type="text" class="form-control" formControlName="zip" placeholder="Zip Code">
+                    </div>
+                </div>
+            </div>
+            <!-- </> -->
+
+            <!-- <> Description Information -->
+            <div class="card mb-3">
+                <div class="card-body p-2 bg-primary text-white">
+                    Description Information
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Tags</label>
+                        <textarea class="form-control" formControlName="tags" placeholder="Tags"></textarea>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea class="form-control" formControlName="description"
+                            placeholder="Description"></textarea>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-sidebar>
+
+
+<!-- <> View lead information -->
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="leadInfoSidebarVisible" position="right">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>
+                Lead Infromation
+                <span class="mdi mdi-check-circle text-success" *ngIf="selectedLead.lead.status == 'O'"></span>
+                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="selectedLead.lead.status == 'L'"></span>
+                <span class="mdi mdi-checkbox-marked-circle-auto-outline text-warning" *ngIf="selectedLead.lead.status == 'N'"></span>
+            </h2>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="col">
+                <table class="table table-sm">
+                    <tr class="p-2">
+                        <td class="text-end pb-4">Lead Owner</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.firstName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Name</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.firstName}} {{selectedLead.lead.lastName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Email</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.email}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Mobile</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.mobile}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Lead Source</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.leadSource}}</td>
+                    </tr>
+                    <tr>
+                        <td class="vertical-align-top text-end pb-4">Address</td>
+                        <td class="ps-4 pb-4">
+                            <span *ngIf="selectedLead.lead.street">{{selectedLead.lead.street}},<br></span>
+                            <span>{{selectedLead.lead.city}} - {{selectedLead.lead.zip}},</span><br>
+                            <span>{{selectedLead.lead.state}}, {{selectedLead.lead.country}}</span><br>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Description</td>
+                        <td class="ps-4 pb-4">
+                            {{selectedLead.lead.description}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4">Tags</td>
+                        <td class="ps-4 pb-4">{{selectedLead.lead.tags}}</td>
+                    </tr>
+                    <tr>
+                        <td class="vertical-align-top text-end pb-4">Tasks</td>
+                        <td class="vertical-align-top ps-4 pb-4">
+                            <div *ngFor="let t of selectedLead.tasks">
+                                <a class="pt-0" routerLink="{{t.taskNum}}">{{t.taskNum}} - {{t.subject}}</a><br>
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ng-template>
+</p-sidebar>
+<!-- </> View lead information -->
+
+<!-- <> Create task for lead(s) -->
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="taskFormVisible" position="right" (onHide)="taskForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{taskForm.get('id')?.value ? 'Update ': 'New '}} Task</h2>
+        </div>
+        <div class="col text-end">
+            <!-- <button type=" button" class="btn btn-secondary" (click)="sidebarVisible = false">Cancel</button> -->
+            <button type="button" class="btn btn-primary" (click)="createTask();">
+                {{taskForm.get('id')?.value ? 'Update': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="taskForm" class="form" autocomplete="off" novalidate>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <input type="hidden" formControlName="id">
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" formControlName="subject" placeholder="Subject">
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('subject')?.dirty ||taskForm.get('subject')?.touched)">
+                            <div [hidden]="!taskForm.get('subject')?.errors?.['required']">
+                                Subject is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea type="text" class="form-control" formControlName="description"
+                            placeholder="Description"></textarea>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('description')?.dirty ||taskForm.get('description')?.touched)">
+                            <div [hidden]="!taskForm.get('description')?.errors?.['required']">
+                                Description is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <p-calendar formControlName="startDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="Start Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('startDate')?.dirty ||taskForm.get('startDate')?.touched)">
+                            <div [hidden]="!taskForm.get('startDate')?.errors?.['required']">
+                                Start Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <p-calendar formControlName="endDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="End Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('endDate')?.dirty ||taskForm.get('endDate')?.touched)">
+                            <div [hidden]="!taskForm.get('endDate')?.errors?.['required']">
+                                End Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <p-dropdown class="p-inputtext-sm w-100" formControlName="status"
+                            [options]="[{label:'To Do', value:'TD'},{label:'In Progress', value:'IP'},{label:'Completed', value:'C'}]"
+                            optionLabel="label" optionValue="value"></p-dropdown>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('status')?.dirty ||taskForm.get('status')?.touched)">
+                            <div [hidden]="!taskForm.get('status')?.errors?.['required']">
+                                Status is required
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Due Date</label>
+                        <p-calendar formControlName="dueDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="Due Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('dueDate')?.dirty ||taskForm.get('dueDate')?.touched)">
+                            <div [hidden]="!taskForm.get('dueDate')?.errors?.['required']">
+                                Due Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <p-dropdown class="p-inputtext-sm w-100" formControlName="priority"
+                            [options]="[{label:'Low', value:'0'},{label:'Medium', value:'1'},{label:'High', value:'2'}, {label:'Important', value:'3'}]"
+                            optionLabel="label" optionValue="value"></p-dropdown>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('priority')?.dirty ||taskForm.get('priority')?.touched)">
+                            <div [hidden]="!taskForm.get('priority')?.errors?.['required']">
+                                Priority is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Lead</label>
+                        <p-multiSelect class="p-inputtext-sm w-100" defaultLabel="Select Lead(s)"
+                            [options]="leadsForTask" formControlName="leadIds" optionLabel="firstName" optionValue="id"
+                            (keyup)="searchLeadsForTask($event)"></p-multiSelect>
+                        <div class="text-danger"
+                            *ngIf="taskFormSubmitted || (taskForm.get('leadIds')?.dirty ||taskForm.get('leadIds')?.touched)">
+                            <div [hidden]="!taskForm.get('leadIds')?.errors?.['leadIds']">
+                                Lead(s) is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </> -->
+        </form>
+    </ng-template>
+</p-sidebar>
+<!-- </> Create task for lead(s) -->
+
+<p-dialog header="Add Tags" [(visible)]="tagsDialog" [modal]="true" [draggable]="false" [resizable]="false">
+    <form (submit)="addNewTag(newTagField)" action="javascript:void(0);">
+        <div class="d-flex">
+            <input type="text" class="form-control" placeholder="Type lead tags" #newTagField />
+            <button type="submit" class="btn btn-secondary" (click)="addNewTag(newTagField)">
+                <i class="mdi mdi-check"></i> &nbsp; Add
+            </button>
+        </div>
+    </form>
+    <div class="mt-2">
+        <p-tag *ngFor="let t of newTags; let i = index" class="mr-1">
+            <span>
+                <span class="text-base">{{t}}</span>
+                <i class="mdi mdi-close text-xs pointer" (click)="removeTag(i)"></i>
+            </span>
+        </p-tag>
+    </div>
+    <ng-template pTemplate="footer">
+        <button class="btn btn-primary" (click)="saveTags($event)">
+            <i class="mdi mdi-check"></i>&nbsp; Save
+        </button>
+    </ng-template>
+
+</p-dialog>

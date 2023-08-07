@@ -1,0 +1,153 @@
+/* You can add global styles to this file, and also import other style files */
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+@import "primeflex/primeflex.css";
+@import "primeicons/primeicons.css";
+
+
+/* @import "primeicons/primeicons.css"; */
+
+button.btn {
+    margin: 0.1rem;
+}
+
+.h-2rem {
+    height: 2rem !important;
+}
+
+buttton.btn.shadow-none {
+    box-shadow: none;
+}
+
+.container-tight {
+    max-width: 40rem;
+}
+
+.p-sidebar-header {
+    border-bottom: 1px solid lightgray;
+}
+
+.p-multiselect {
+    width: 100%;
+}
+
+.p-multiselect .p-multiselect-label {
+    padding: 0.4rem 0.4rem;
+}
+
+.p-multiselect-filter {
+    padding: 0.4rem 0.4rem !important;
+}
+
+.p-checkbox .p-checkbox-box {
+    width: 20px !important;
+    height: 20px !important;
+}
+
+
+/* <> Datepicker  */
+.p-calendar .p-inputtext {
+    padding: 0.45rem 0.45rem !important;
+}
+
+
+.img-overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    text-align: center;
+}
+
+.img-overlay:before {
+    content: ' ';
+    display: block;
+    /* adjust 'height' to position overlay content vertically */
+    height: 50%;
+}
+
+
+.btn-primary {
+    background-color: var(--primary-color) !important;
+}
+
+.p-menu.p-menu-overlay {
+    top: 55.6px !important;
+}
+
+
+.w-100 .p-inputmask {
+    width: 100% !important;
+}
+
+.p-inputtext-sm .p-inputmask {
+    padding: 0.5rem 0.5rem;
+}
+
+/* START - Customizing primeng datepicker */
+
+.p-datepicker table td {
+    padding: 0.1rem;
+}
+
+.p-datepicker table {
+    font-size: 0.8rem;
+}
+
+.p-datepicker table td>span {
+    width: 2rem;
+    height: 2rem;
+}
+
+.p-datepicker .p-timepicker button {
+    width: 1rem;
+    height: 1rem;
+}
+
+.p-datepicker .p-timepicker span {
+    font-size: 1rem;
+}
+
+
+.p-datepicker .p-timepicker {
+    padding: 0.1rem;
+}
+
+.p-datepicker .p-datepicker-buttonbar {
+    padding: 0;
+}
+
+.p-datepicker .p-datepicker-header {
+    padding: 0rem;
+}
+
+.p-datepicker-buttonbar .p-button {
+    padding: 0.5rem 1.25rem;
+}
+
+/* END - Customizing primeng datepicker */
+
+
+.mt-input-icon {
+    margin-top: -0.6rem !important;
+}
+
+.p-splitbutton {
+    line-height: 0rem !important;
+}
+
+.p-splitbutton-defaultbutton {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.7rem !important;
+    padding-right: 0 !important;
+}
+
+.p-button-label {
+    font-weight: 500 !important;
+}
+
+
+.pointer{
+    cursor: pointer;
+}

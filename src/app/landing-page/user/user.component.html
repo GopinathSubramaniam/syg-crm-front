@@ -1,0 +1,448 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col align-self-center">
+                <form action="javascript:void(0);" (submit)="searchUser(searchInput.value)">
+                    <div class="flex">
+                        <span class="p-input-icon-left m-auto mr-2">
+                            <i class="mdi mdi-magnify mt-input-icon"></i>
+                            <input class="form-control pl-5" #searchInput type="text" placeholder="Search keyword" />
+                        </span>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div>
+            <div class="col mb-2 text-end">
+                <button class="btn btn-danger" (click)="deleteConfirm($event)">Delete</button>
+                <button class="btn btn-primary" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCreateTask">Create
+                    Task</button>
+                <button (click)="sidebarVisible = true" class="btn btn-primary">Create
+                    User </button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <p-table #dt [value]="users.data" [paginator]="true" [lazy]="true" [rows]="10"
+                    [showCurrentPageReport]="true" [loading]="loading" [totalRecords]="users.totalRecords"
+                    (onLazyLoad)="nextPage($event)" [(selection)]="selectedRows">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>
+                                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            </th>
+                            <th class="fs-5">UPDATED DATE</th>
+                            <th class="fs-5">EMP ID</th>
+                            <th class="fs-5">NAME</th>
+                            <th class="fs-5">POSITION</th>
+                            <th class="fs-5">USER TYPE</th>
+                            <th class="fs-5">BRANCH</th>
+                            <th class="fs-5">MOBILE</th>
+                            <th class="fs-5">EMAIL</th>
+                            <th class="fs-5">LOCATION</th>
+                            <th class="fs-5">ACTION</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-u>
+                        <tr>
+                            <td>
+                                <div>
+                                    <p-tableCheckbox [value]="u" [disabled]="!appService.isSuperAdmin() && !(appService.isAdmin() && appService.isSameBranch(u.userDetail.branch.id))"></p-tableCheckbox>
+                                </div>
+                            </td>
+                            <td class="fs-4">{{ u.updatedDate | date: 'dd/MM/yy h:mm a' }}</td>
+                            <td class="fs-4">{{ u.userDetail.userCode }}</td>
+                            <td class="fs-4">{{ u.userDetail.firstName }}</td>
+                            <td class="fs-4">
+                                <span *ngIf="u.userDetail.workPosition == 'M'">Manager</span>
+                                <span *ngIf="u.userDetail.workPosition == 'SP'">Sales Person</span>
+                            </td>
+                            <td class="fs-4">
+                                <span *ngIf="u.userType == 'SA'">Super Admin</span>
+                                <span *ngIf="u.userType == 'A'">Admin</span>
+                                <span *ngIf="u.userType == 'E'">Employee</span>
+                            </td>
+                            <td class="fs-4">{{ u.userDetail.branch.name }}</td>
+                            <td class="fs-4">{{ u.userDetail.mobile }}</td>
+                            <td class="fs-4">{{ u.userDetail.email }}</td>
+                            <td class="fs-4">
+                                {{ u.userDetail.city }}-{{ u.userDetail.state }}<br>
+                                {{ u.userDetail.country }}
+                            </td>
+
+                            <td class="fs-4">
+                                <button class="btn btn-info btn-sm px-2" (click)="view(u.id)">
+                                    <span class="mdi mdi-open-in-new"></span>
+                                </button>
+                                <button class="btn btn-secondary btn-sm px-2" (click)="edit(u.id)"
+                                    *ngIf="appService.isSuperAdmin() || (appService.isAdmin() && appService.isSameBranch(u.userDetail.branch.id))">
+                                    <span class="mdi mdi-circle-edit-outline"></span>
+                                </button>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <!-- <ng-template pTemplate="paginatorleft">
+                    <p-button type="button" icon="pi pi-plus" styleClass="p-button-text"></p-button>
+                </ng-template>
+                <ng-template pTemplate="paginatorright">
+                    <p-button type="button" icon="pi pi-cloud" styleClass="p-button-text"></p-button>
+                </ng-template> -->
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarVisible" position="right" (onHide)="userForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{userForm.get('id')?.value ? 'Update ': 'New '}} User</h2>
+        </div>
+        <div class="col text-end">
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{userForm.get('id')?.value ? 'Update': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="userForm" class="form" autocomplete="off" novalidate>
+            <div class="card my-3">
+                <div class="card-body p-2 bg-primary text-white">
+                    Login Credentials
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <input type="hidden" formControlName="id">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" class="form-control" formControlName="userName" placeholder="Username">
+
+                        <!-- <input type="text" class="form-control" placeholder="Lead Owner"> -->
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userName')?.dirty ||userForm.get('userName')?.touched">
+                            <div [hidden]="!userForm.get('userName')?.errors?.['required']">
+                                Username is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="password" class="form-control" formControlName="password" placeholder="Password">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('password')?.dirty ||userForm.get('password')?.touched">
+                            <div [hidden]="!userForm.get('password')?.errors?.['required']">
+                                Password is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" class="form-control" formControlName="email" placeholder="Email">
+                        <div class="text-danger" *ngIf="userForm.get('email')?.dirty ||userForm.get('email')?.touched">
+                            <div [hidden]="!userForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">User Type</label>
+                        <select class="form-control" formControlName="userType">
+                            <option value="SA" *ngIf="appService.isSuperAdmin()">Super Admin</option>
+                            <option value="A">Admin</option>
+                            <option value="E">Employee</option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userType')?.dirty ||userForm.get('userType')?.touched">
+                            <div [hidden]="!userForm.get('userType')?.errors?.['required']">
+                                User type is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-body p-2 bg-primary text-white">
+                    Detail
+                </div>
+            </div>
+
+            <div class="row" formGroupName="userDetail">
+                <div class="col">
+                    <!-- id -->
+                    <input type="hidden" formControlName="id">
+
+                    <!-- First Name -->
+                    <div class="mb-3">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" formControlName="firstName" placeholder="First Name">
+
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.firstName')?.dirty ||userForm.get('userDetail.firstName')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.firstName')?.errors?.['required']">
+                                First Name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile -->
+                    <div class="mb-3">
+                        <label class="form-label">Mobile</label>
+                        <input type="text" class="form-control" formControlName="mobile" placeholder="Mobile">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.mobile')?.dirty ||userForm.get('userDetail.mobile')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.mobile')?.errors?.['required']">
+                                Password is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label class="form-label">Address</label>
+                        <input type="text" class="form-control" formControlName="address" placeholder="Address">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.address')?.dirty ||userForm.get('userDetail.address')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.address')?.errors?.['required']">
+                                Address is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- State -->
+                    <div class="mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" class="form-control" formControlName="state" placeholder="State">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.state')?.dirty ||userForm.get('userDetail.state')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.state')?.errors?.['required']">
+                                State is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Branch -->
+                    <div class="mb-3" formGroupName="branch" *ngIf="appService.isSuperAdmin()">
+                        <label class="form-label">Branch</label>
+                        <select class="form-control" formControlName="id">
+                            <option>-- Select Branch --</option>
+                            <option *ngFor="let b of branches" [value]="b.id">{{b.code}}-{{b.name}}</option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.branch.id')?.dirty ||userForm.get('userDetail.branch.id')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.branch.id')?.errors?.['required']">
+                                Branch is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- Last Name -->
+                    <div class="mb-3">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" formControlName="lastName" placeholder="Last Name">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.lastName')?.dirty ||userForm.get('userDetail.lastName')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.lastName')?.errors?.['required']">
+                                Last Name is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Work position -->
+                    <div class="mb-3">
+                        <label class="form-label">Position</label>
+                        <select class="form-control" formControlName="workPosition">
+                            <option value="M">Manager</option>
+                            <option value="SP">Sales Person</option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.workPosition')?.dirty ||userForm.get('userDetail.workPosition')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.workPosition')?.errors?.['required']">
+                                Positionis required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" class="form-control" formControlName="city" placeholder="City">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.city')?.dirty ||userForm.get('userDetail.city')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.city')?.errors?.['required']">
+                                City is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label class="form-label">Country</label>
+                        <input type="text" class="form-control" formControlName="country" placeholder="Country">
+                        <div class="text-danger"
+                            *ngIf="userForm.get('userDetail.country')?.dirty ||userForm.get('userDetail.country')?.touched">
+                            <div [hidden]="!userForm.get('userDetail.country')?.errors?.['required']">
+                                Country is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- </> -->
+        </form>
+    </ng-template>
+</p-sidebar>
+
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarDetailVisible" position="right">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>User Detail</h2>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="card my-3">
+            <div class="card-body p-2 bg-primary text-white">
+                Login Credentials
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Username</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userName}}</label>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Password</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">**********</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Email</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userDetail.firstName}}</label>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">User Type</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label" *ngIf="selectedUser.userType == 'SA'">Super Admin</label>
+                        <label class="form-label" *ngIf="selectedUser.userType == 'A'">Admin</label>
+                        <label class="form-label" *ngIf="selectedUser.userType == 'U'">User</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card mb-3">
+            <div class="card-body p-2 bg-primary text-white">
+                Detail
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <!-- First Name -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">First Name</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userDetail.firstName}}</label>
+                    </div>
+                </div>
+
+                <!-- Mobile -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Mobile</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userDetail.mobile}}</label>
+                    </div>
+                </div>
+
+                <!-- Address -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Address</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userDetail.address}}</label>
+                    </div>
+                </div>
+
+                <!-- State -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">State</label>
+                    </div>
+                    <div class="h-2rem">
+                        <label class="form-label">{{selectedUser.userDetail.state}}</label>
+                    </div>
+                </div>
+
+                <!-- Branch -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Branch</label>
+                    </div>
+                    <label class="form-label">{{selectedUser.userDetail.branch.name}}</label>
+                </div>
+            </div>
+            <div class="col">
+                <!-- Last Name -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Last Name</label>
+                    </div>
+                    <label class="form-label">{{selectedUser.userDetail.lastName}}</label>
+                </div>
+
+                <!-- Work position -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Position</label>
+                    </div>
+                    <label class="form-label">{{selectedUser.userDetail.position}}</label>
+                </div>
+
+                <!-- City -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">City</label>
+                    </div>
+                    <label class="form-label">{{selectedUser.userDetail.city}}</label>
+                </div>
+
+                <!-- City -->
+                <div class="mb-3">
+                    <div>
+                        <label class="form-label">Country</label>
+                    </div>
+                    <label class="form-label">{{selectedUser.userDetail.country}}</label>
+                </div>
+            </div>
+
+        </div>
+    </ng-template>
+</p-sidebar>

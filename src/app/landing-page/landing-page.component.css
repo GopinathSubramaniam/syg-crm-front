@@ -1,0 +1,35 @@
+header .p-dropdown {
+    background-color: rgba(var(--tblr-primary-rgb), var(--tblr-bg-opacity)) !important;
+    border: 0px;
+    color: #ffffff;
+}
+
+header .p-dropdown .p-inputtext {
+    color: white;
+}
+
+header .p-dropdown .p-dropdown-trigger {
+    color: #ffffff;
+}
+
+.p-element .p-dropdown-label {
+    padding: 0.45rem 0.45rem !important;
+}
+
+.p-element.w-100 .p-dropdown.p-component {
+    width: 100%;
+}
+
+.p-paginator {
+    padding: 0.1rem;
+}
+
+.p-paginator-bottom.p-paginator.p-component {
+    font-size: .75rem !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page {
+    min-width: 2rem;
+    height: 2rem;
+    font-size: .75rem !important;
+}

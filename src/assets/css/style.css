@@ -1,0 +1,23 @@
+* {
+    font-family: 'Calibri' !important;
+}
+
+.h-100vh {
+    height: 100vh;
+}
+
+.page-wrapper {
+    margin-top: 7rem;
+}
+
+.form-control:focus {
+    box-shadow: none;
+}
+
+/* .bg-primary {
+    color: #fff !important;
+}
+ */
+.navbar-brand{
+    color: #fff !important;
+}

@@ -1,0 +1,256 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mb-2 text-end">
+                <button class="btn btn-danger" (click)="deleteConfirm($event)">Delete</button>
+                <button (click)="sidebarVisible = true" class="btn btn-primary">New Task</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="card h-100">
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            <h4>FILTERS</h4>
+                            <div class="input-icon">
+                                <span class="input-icon-addon">
+                                    <span class="mdi mdi-magnify"></span>
+                                </span>
+                                <input type="text" #searchField class="form-control" [(ngModel)]="filter.searchTxt"
+                                    placeholder="Search…" (keyup.enter)="nextPage()">
+                            </div>
+                        </div>
+                        <div class="p-3 pt-2">
+                            <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-1" aria-expanded="true">
+                                Status
+                            </button>
+
+                            <label class="form-check">
+                                <p-radioButton name="status" value="" [(ngModel)]="filter.status"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">All</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="status" value="TD" [(ngModel)]="filter.status"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">To Do</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="status" value="IP" [(ngModel)]="filter.status"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">In Progress</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="status" value="C" [(ngModel)]="filter.status"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">Completed</label>
+                            </label>
+                        </div>
+
+                        <div class="p-3 pt-2">
+                            <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse-1" aria-expanded="true">
+                                Priority
+                            </button>
+
+                            <label class="form-check">
+                                <p-radioButton name="priority" value="" [(ngModel)]="filter.priority"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">All</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="priority" value="0" [(ngModel)]="filter.priority"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">Low</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="priority" value="1" [(ngModel)]="filter.priority"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">Medium</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="priority" value="2" [(ngModel)]="filter.priority"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">High</label>
+                            </label>
+                            <label class="form-check">
+                                <p-radioButton name="priority" value="3" [(ngModel)]="filter.priority"
+                                    (onClick)="nextPage()"></p-radioButton>
+                                <label class="ml-2">Immediate</label>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <p-table [value]="tasks.data" [paginator]="true" [lazy]="true" [rows]="10"
+                            [showCurrentPageReport]="true" [loading]="loading" [totalRecords]="tasks.totalRecords"
+                            (onLazyLoad)="nextPage($event)" [(selection)]="selectedRows">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th class="fs-5">UPDATED DATE</th>
+                                    <th class="fs-5">SUBJECT</th>
+                                    <th class="fs-5">START DATE</th>
+                                    <th class="fs-5">DUE DATE</th>
+                                    <th class="fs-5">END DATE</th>
+                                    <th class="fs-5">PRIORITY</th>
+                                    <th class="fs-5">STATUS</th>
+                                    <th class="fs-5">ACTION</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-task>
+                                <tr>
+                                    <td>
+                                        <p-tableCheckbox [value]="task"></p-tableCheckbox>
+                                    </td>
+                                    <td class="fs-4">{{ task.updatedDate | date: 'dd/MM/yy h:mm a' }}</td>
+                                    <td class="fs-4">{{ task.subject }}</td>
+                                    <td class="fs-4">{{ task.startDate | date: 'dd/MM/yy' }}</td>
+                                    <td class="fs-4">{{ task.dueDate | date: 'dd/MM/yy' }}</td>
+                                    <td class="fs-4">{{ task.endDate | date: 'dd/MM/yy' }}</td>
+                                    <td class="fs-4">
+                                        <span class="badge badge-outline"
+                                            [class]="[getPriority(task.priority).className]">
+                                            {{getPriority(task.priority).label}}
+                                        </span>
+                                    </td>
+                                    <td class="fs-4">
+                                        <span class="badge badge-outline" [class]="[getStatus(task.status).className]">
+                                            {{getStatus(task.status).label}}
+                                        </span>
+                                    </td>
+                                    <td class="fs-4">
+                                        <button class="btn btn-sm btn-primary px-2" (click)="edit(task.id)"
+                                            *ngIf="appService.isSuperAdmin() || (appService.isAdmin() && appService.isSameUserDetail(task.userDetail.id))">
+                                            <span class="mdi mdi-circle-edit-outline"></span>&nbsp;
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarVisible" position="right" (onHide)="taskForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{taskForm.get('id')?.value ? 'Update ': 'New '}} Task</h2>
+        </div>
+        <div class="col text-end">
+            <!-- <button type=" button" class="btn btn-secondary" (click)="sidebarVisible = false">Cancel</button> -->
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{taskForm.get('id')?.value ? 'Update': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="taskForm" class="form" autocomplete="off" novalidate>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <input type="hidden" formControlName="id">
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" formControlName="subject" placeholder="Subject">
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('subject')?.dirty ||taskForm.get('subject')?.touched)">
+                            <div [hidden]="!taskForm.get('subject')?.errors?.['required']">
+                                Subject is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea type="text" class="form-control" formControlName="description"
+                            placeholder="Description"></textarea>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('description')?.dirty ||taskForm.get('description')?.touched)">
+                            <div [hidden]="!taskForm.get('description')?.errors?.['required']">
+                                Description is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Start Date</label>
+                        <p-calendar formControlName="startDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="Start Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('startDate')?.dirty ||taskForm.get('startDate')?.touched)">
+                            <div [hidden]="!taskForm.get('startDate')?.errors?.['required']">
+                                Start Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">End Date</label>
+                        <p-calendar formControlName="endDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="End Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('endDate')?.dirty ||taskForm.get('endDate')?.touched)">
+                            <div [hidden]="!taskForm.get('endDate')?.errors?.['required']">
+                                End Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <p-dropdown class="p-inputtext-sm w-100" formControlName="status"
+                            [options]="[{label:'To Do', value:'TD'},{label:'In Progress', value:'IP'},{label:'Completed', value:'C'}]"
+                            optionLabel="label" optionValue="value"></p-dropdown>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('status')?.dirty ||taskForm.get('status')?.touched)">
+                            <div [hidden]="!taskForm.get('status')?.errors?.['required']">
+                                Status is required
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Due Date</label>
+                        <p-calendar formControlName="dueDate" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="Due Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('dueDate')?.dirty ||taskForm.get('dueDate')?.touched)">
+                            <div [hidden]="!taskForm.get('dueDate')?.errors?.['required']">
+                                Due Date is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Priority</label>
+                        <p-dropdown class="p-inputtext-sm w-100" formControlName="priority"
+                            [options]="[{label:'Low', value:'0'},{label:'Medium', value:'1'},{label:'High', value:'2'}, {label:'Important', value:'3'}]"
+                            optionLabel="label" optionValue="value"></p-dropdown>
+                        <div class="text-danger"
+                            *ngIf="submitted || (taskForm.get('priority')?.dirty ||taskForm.get('priority')?.touched)">
+                            <div [hidden]="!taskForm.get('priority')?.errors?.['required']">
+                                Priority is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </> -->
+        </form>
+    </ng-template>
+</p-sidebar>

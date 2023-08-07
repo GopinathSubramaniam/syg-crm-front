@@ -1,0 +1,270 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <!--  <div class="col align-self-center">
+                <form action="javascript:void(0);" (submit)="searchMeeting(searchInput.value)">
+                    <div class="flex">
+                        <span class="p-input-icon-left m-auto mr-2">
+                            <i class="mdi mdi-magnify mt-input-icon"></i>
+                            <input class="form-control pl-5" #searchInput type="text" placeholder="Search keyword" />
+                        </span>
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                </form>
+            </div> -->
+            <div class="col mb-2 text-end">
+                <button class="btn btn-danger" (click)="deleteConfirm($event)">Delete</button>
+                <button (click)="sidebarVisible = true" class="btn btn-primary">New Meeting</button>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-2">
+                <div class="card h-100">
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            <h4>FILTERS</h4>
+                            <div class="input-icon">
+                                <span class="input-icon-addon">
+                                    <span class="mdi mdi-magnify"></span>
+                                </span>
+                                <input type="text" #searchField class="form-control" [(ngModel)]="filter.searchTxt"
+                                    placeholder="Search…" (keyup.enter)="search()">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accordion" id="accordion-example">
+                                <div class="accordion-item border-0">
+                                    <h2 class="accordion-header" id="heading-1">
+                                        <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-1" aria-expanded="true">
+                                            System Defined Filters
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-1" class="accordion-collapse collapse show"
+                                        data-bs-parent="#accordion-example">
+                                        <div class="accordion-body pt-0">
+
+                                            <div class="flex flex-column gap-3">
+                                                <div class="flex align-items-center">
+                                                    <p-radioButton name="period" value="" [(ngModel)]="filter.period"
+                                                        (onClick)="search()"></p-radioButton>
+                                                    <label for="ingredient1" class="ml-2">All</label>
+                                                </div>
+                                                <div class="flex align-items-center">
+                                                    <p-radioButton name="period" value="T" [(ngModel)]="filter.period"
+                                                        (onClick)="search()"></p-radioButton>
+                                                    <label for="ingredient1" class="ml-2">Today</label>
+                                                </div>
+                                                <div class="flex align-items-center">
+                                                    <p-radioButton name="period" value="W" [(ngModel)]="filter.period"
+                                                        (onClick)="search()"></p-radioButton>
+                                                    <label for="ingredient1" class="ml-2">Week</label>
+                                                </div>
+                                                <div class="flex align-items-center">
+                                                    <p-radioButton name="period" value="M" [(ngModel)]="filter.period"
+                                                        (onClick)="search()"></p-radioButton>
+                                                    <label for="ingredient1" class="ml-2">Month</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-10">
+                <div class="card">
+                    <div class="card-body p-0">
+                        <p-table [value]="meeting.data" [paginator]="true" [lazy]="true" [rows]="10"
+                            [showCurrentPageReport]="true" [loading]="loading" [totalRecords]="meeting.totalRecords"
+                            (onLazyLoad)="nextPage($event)" [(selection)]="selectedRows">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th>
+                                        <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                    </th>
+                                    <th class="fs-5">MEETING ID</th>
+                                    <th class="fs-5">CREATED BY</th>
+                                    <th class="fs-5">SUBJECT</th>
+                                    <th class="fs-5">HOST</th>
+                                    <th class="fs-5">START TIME</th>
+                                    <th class="fs-5">END TIME</th>
+                                    <th class="fs-5">PLACE</th>
+                                    <th class="fs-5">ACTION</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-meet>
+                                <tr>
+                                    <td>
+                                        <p-tableCheckbox [value]="meet"></p-tableCheckbox>
+                                    </td>
+                                    <td class="fs-4">{{ meet.meeting.meetingId }}</td>
+                                    <td class="fs-4">
+                                        <div>
+                                            {{ meet.meeting.updatedDate | date: 'dd/MM/yy' }}
+                                        </div>
+                                        <div class="badge bg-secondary">{{meet.createdBy}} </div>
+                                    </td>
+                                    <td class="fs-4">{{ meet.meeting.subject }}</td>
+                                    <td class="fs-4">{{ meet.meeting.host.firstName }}</td>
+                                    <td class="fs-4">{{ meet.meeting.startTime | date: 'dd/MM/yy h:mm a' }}</td>
+                                    <td class="fs-4">{{ meet.meeting.endTime | date: 'dd/MM/yy h:mm a' }}</td>
+                                    <td class="fs-4">{{ meet.meeting.place }}</td>
+                                    <td class="fs-4">
+                                        <button class="btn btn-sm btn-outline-primary px-2"
+                                            *ngIf="appService.isSuperAdmin() || (appService.isAdmin() && appService.isSameUserDetail(meet.participant.id))"
+                                            (click)="edit(meet.meeting.id)">
+                                            <span class="mdi mdi-circle-edit-outline"></span>
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-primary px-2"
+                                            (click)="sendEmailNotification(meet.meeting.id)">
+                                            <span class="mdi mdi-email-fast-outline"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarVisible" position="right" (onHide)="onSidebarHide()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{meetingForm.get('id')?.value ? 'Update ': 'New '}} Meeting</h2>
+        </div>
+        <div class="col text-end">
+            <!-- <button type=" button" class="btn btn-secondary" (click)="sidebarVisible = false">Cancel</button> -->
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{meetingForm.get('id')?.value ? 'Update': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="meetingForm" class="form" autocomplete="off" novalidate>
+            <div class="row mt-4">
+                <div class="col-12">
+                    <input type="hidden" formControlName="id">
+
+                    <!-- Subject -->
+                    <div class="mb-3">
+                        <label class="form-label">Subject</label>
+                        <input type="text" class="form-control" formControlName="subject" placeholder="Subject">
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('subject')?.dirty ||meetingForm.get('subject')?.touched">
+                            <div [hidden]="!meetingForm.get('subject')?.errors?.['required']">
+                                Subject is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Description -->
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <input type="text" class="form-control" formControlName="description" placeholder="Description">
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('description')?.dirty ||meetingForm.get('description')?.touched">
+                            <div [hidden]="!meetingForm.get('description')?.errors?.['required']">
+                                Description is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Participants -->
+                    <div class="mb-3">
+                        <label class="form-label">Participants</label>
+                        <p-multiSelect class="p-inputtext-sm w-100" defaultLabel="Select Participants"
+                            [options]="participantList" formControlName="participants"
+                            optionLabel="userDetail.firstName" optionValue="userDetail.id"></p-multiSelect>
+
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('participants')?.dirty ||meetingForm.get('participants')?.touched">
+                            <div [hidden]="!meetingForm.get('participants')?.errors?.['required']">
+                                Participants is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- host -->
+                    <div class="mb-3">
+                        <label class="form-label">Host</label>
+                        <p-dropdown class="p-inputtext-sm w-100" defaultLabel="Select Host" [options]="participantList"
+                            formControlName="host" optionLabel="userDetail.firstName" optionValue="userDetail.id"
+                            placeholder="Select Host"></p-dropdown>
+
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('participants')?.dirty ||meetingForm.get('participants')?.touched">
+                            <div [hidden]="!meetingForm.get('participants')?.errors?.['required']">
+                                Participants is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- Start Time -->
+                    <div class="mb-3">
+                        <label class="form-label">Start Time</label>
+                        <p-calendar formControlName="startTime" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="Start Time" [showButtonBar]="true" [showTime]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('startTime')?.dirty ||meetingForm.get('startTime')?.touched">
+                            <div [hidden]="!meetingForm.get('startTime')?.errors?.['required']">
+                                Start Time is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Place -->
+                    <div class="mb-3">
+                        <label class="form-label">Place</label>
+                        <input type="text" class="form-control" formControlName="place" placeholder="Place">
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('place')?.dirty ||meetingForm.get('place')?.touched">
+                            <div [hidden]="!meetingForm.get('place')?.errors?.['required']">
+                                Status is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <!-- End Time -->
+                    <div class="mb-3">
+                        <label class="form-label">End Time</label>
+                        <p-calendar formControlName="endTime" class="w-100 p-inputtext-sm" appendTo="body"
+                            placeholder="End Time" [showButtonBar]="true" [showTime]="true" [style]="{'width':'100%'}"
+                            [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('endTime')?.dirty ||meetingForm.get('endTime')?.touched">
+                            <div [hidden]="!meetingForm.get('endTime')?.errors?.['required']">
+                                Due Date is required
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reminder Minutes -->
+                    <div class="mb-3">
+                        <label class="form-label">Reminder</label>
+                        <p-dropdown class="p-inputtext-sm w-100" formControlName="reminderMins" [options]="reminderMins"
+                            optionLabel="label" optionValue="value" placeholder="Select Reminder"></p-dropdown>
+                        <div class="text-danger"
+                            *ngIf="meetingForm.get('reminderMins')?.dirty ||meetingForm.get('reminderMins')?.touched">
+                            <div [hidden]="!meetingForm.get('reminderMins')?.errors?.['required']">
+                                Priority is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- </> -->
+        </form>
+    </ng-template>
+</p-sidebar>

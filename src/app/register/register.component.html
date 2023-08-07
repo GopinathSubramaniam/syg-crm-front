@@ -1,0 +1,199 @@
+<div class="row g-0 grid">
+    <div class="sm:col-12 lg:col-6 xl:col-5 border-top-wide border-primary d-flex flex-column justify-content-center">
+        <div class="container container-tight px-lg-5">
+            <div class="text-center">
+                <h5> AL-HIND</h5>
+            </div>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="form" autocomplete="off" novalidate>
+                <div>
+                    <h2 class="mb-4 text-center fw-bold">REGISTER</h2>
+
+                    <div class="card mb-3">
+                        <div class="card-body p-2 bg-primary text-white">
+                            Business Information
+                        </div>
+                    </div>
+
+                    <div formGroupName="company">
+                        <div class="row">
+                            <div class="col">
+                                <div class="mb-3">
+                                    <label class="form-label">Name</label>
+                                    <input type="text" class="form-control" formControlName="name"
+                                        placeholder="Enter Name">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.name')?.dirty ||registerForm.get('company.name')?.touched">
+                                        <div [hidden]="!registerForm.get('company.name')?.errors?.['required']">
+                                            Name is required
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" formControlName="email"
+                                        placeholder="Enter Email">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.email')?.dirty ||registerForm.get('company.email')?.touched">
+                                        <div [hidden]="!registerForm.get('company.email')?.errors?.['required']">
+                                            Email is required
+                                        </div>
+                                        <div [hidden]="!registerForm.get('company.email')?.errors?.['email']">
+                                            Enter valid email
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Mobile</label>
+                                    <input type="text" class="form-control" formControlName="mobile"
+                                        placeholder="Enter Mobile">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.mobile')?.dirty ||registerForm.get('company.mobile')?.touched">
+                                        <div [hidden]="!registerForm.get('company.mobile')?.errors?.['required']">
+                                            Mobile is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Street</label>
+                                    <input type="text" class="form-control" formControlName="street"
+                                        placeholder="Enter Address">
+
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.street')?.dirty ||registerForm.get('company.street')?.touched">
+                                        <div [hidden]="!registerForm.get('company.street')?.errors?.['required']">
+                                            Street is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">City</label>
+                                    <input type="text" class="form-control" formControlName="city"
+                                        placeholder="Enter City">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.city')?.dirty ||registerForm.get('company.city')?.touched">
+                                        <div [hidden]="!registerForm.get('company.city')?.errors?.['required']">
+                                            City is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">State</label>
+                                    <input type="text" class="form-control" formControlName="state"
+                                        placeholder="Enter State">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.state')?.dirty ||registerForm.get('company.state')?.touched">
+                                        <div [hidden]="!registerForm.get('company.state')?.errors?.['required']">
+                                            State is required
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" class="form-control" formControlName="country"
+                                        placeholder="Enter Country">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('company.country')?.dirty ||registerForm.get('company.country')?.touched">
+                                        <div [hidden]="!registerForm.get('company.country')?.errors?.['required']">
+                                            Country is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card mb-3">
+                        <div class="card-body p-2 bg-primary text-white">
+                            Login Information
+                        </div>
+                    </div>
+
+                    <div formGroupName="user">
+                        <div class="row">
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Usernme</label>
+                                    <input type="text" class="form-control" formControlName="userName"
+                                        placeholder="Enter Usernme">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('user.userName')?.dirty ||registerForm.get('user.userName')?.touched">
+                                        <div [hidden]="!registerForm.get('user.userName')?.errors?.['required']">
+                                            Usernme is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control" formControlName="email"
+                                        placeholder="Enter Email">
+
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('user.email')?.dirty ||registerForm.get('user.email')?.touched">
+                                        <div [hidden]="!registerForm.get('user.email')?.errors?.['required']">
+                                            Email is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" formControlName="password"
+                                        placeholder="Enter Password">
+                                    <div class="text-danger"
+                                        *ngIf="registerForm.get('user.password')?.dirty ||registerForm.get('user.password')?.touched">
+                                        <div [hidden]="!registerForm.get('user.password')?.errors?.['required']">
+                                            Password is required
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-check ms-4">
+                        <input type="checkbox" class="form-check-input" />
+                        <span class="form-check-label">Agree the <a href="./terms-of-service.html" tabindex="-1">terms
+                                and policy</a>.</span>
+                    </label>
+                </div>
+                <div class="form-footer m-3 d-flex">
+                    <a href="#" routerLink="/login" class="btn btn-secondary w-100">
+                        <span class="mdi mdi-arrow-left pe-1"></span>
+                        Back to Login
+                    </a>
+                    <button type="submit" class="btn btn-primary w-100" [disabled]="disableSubmitBtn">
+                        <span class="mdi mdi-check-circle-outline pe-1"></span>
+                        Create new account
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="sm:col-12 lg:col-6 xl:col-6 d-none d-lg-block">
+        <div class="bg-cover h-100"
+            style="background-image: url(./assets/images/finances-us-dollars-and-bitcoins-currency-money-2.jpg)">
+        </div>
+    </div>
+</div>

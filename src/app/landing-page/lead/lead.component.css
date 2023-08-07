@@ -1,0 +1,4 @@
+.p-dropdown, .p-dropdown:hover {
+    background-color: #FFFFFF !important;
+    border: var(--tblr-border-width) solid var(--tblr-border-color);
+}

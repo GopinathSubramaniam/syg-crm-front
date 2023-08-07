@@ -1,0 +1,176 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mb-2 text-end">
+                <button class="btn btn-danger" (click)="deleteConfirm($event)">Delete</button>
+                <button class="btn btn-primary" (click)="sidebarVisible = true">New Product</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-6 col-lg-3 mb-3" *ngFor="let media of medias">
+                                <div class="card card-sm">
+                                    <a class="d-block">
+                                        <img [src]="media.mediaUrl" class="card-img-top">
+                                        <div class="img-overlay">
+                                            <button class="btn btn-secondary" style="background-color: #18243394;"
+                                                (click)="edit(media.id)">Edit</button>
+
+                                            <button class="btn btn-secondary" style="background-color: #034faf94;"
+                                                (click)="edit(media.id)">Detail</button>
+                                        </div>
+                                    </a>
+                                    <div class="card-body">
+                                        <div class="d-flex align-items-center">
+                                            <div class="pe-2">
+                                                <a class="nav-link btn bnt-primary btn-sm" href="#">
+                                                    <p-checkbox name="group1" [value]="media.product.id"
+                                                        [(ngModel)]="selectedRows" inputId="ny"></p-checkbox>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <h4 class="m-0">{{media.product.name}}</h4>
+                                                <div class="text-muted">({{media.product.description}})</div>
+                                            </div>
+                                            <div class="ms-auto text-end">
+                                                <div>Valid Till: {{media.product.expiryDate | date: 'dd/MM/yy'}}
+                                                </div>
+                                                <strong class="text-muted">INR
+                                                    {{media.product.price.toFixed(2)}}*</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarVisible" position="right" (onHide)="productForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>{{productForm.get('product.id')?.value ? 'Update ': 'New '}} Product</h2>
+        </div>
+        <div class="col text-end">
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{productForm.get('product.id')?.value ? 'Update ': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="productForm" class="form mt-4" autocomplete="off" novalidate>
+            <div formGroupName="product">
+                <input type="hidden" formControlName="id">
+
+                <!-- Product Name -->
+                <div class="mb-3">
+                    <label class="form-label">Product Name</label>
+                    <input type="text" formControlName="name" class="form-control" placeholder="Product Name">
+                    <div class="text-danger" *ngIf="productForm.get('name')?.dirty ||productForm.get('name')?.touched">
+                        <div [hidden]="!productForm.get('name')?.errors?.['required']">
+                            Branch code is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Description -->
+                <div class="mb-3">
+                    <label class="form-label">Description</label>
+                    <input type="text" formControlName="description" class="form-control" placeholder="Description">
+                    <div class="text-danger"
+                        *ngIf="productForm.get('description')?.dirty || productForm.get('description')?.touched">
+                        <div [hidden]="!productForm.get('description')?.errors?.['required']">
+                            Mobile is required
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Images -->
+                <div class="mb-3">
+                    <label class="form-label">Images</label>
+                    <input type="file" multiple class="form-control" (change)="onSelectFile($event)">
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <!-- Expiry Date -->
+                        <div class="mb-3">
+                            <label class="form-label">Expiry Date</label>
+                            <p-calendar formControlName="expiryDate" class="w-100 p-inputtext-sm" appendTo="body"
+                                placeholder="Expiry Date" [showButtonBar]="true" [style]="{'width':'100%'}"
+                                [readonlyInput]="true" dateFormat="yy-mm-dd"></p-calendar>
+                            <div class="text-danger"
+                                *ngIf="productForm.get('expiryDate')?.dirty ||productForm.get('expiryDate')?.touched">
+                                <div [hidden]="!productForm.get('expiryDate')?.errors?.['required']">
+                                    Name is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Active -->
+                        <div class="mb-3">
+                            <label class="form-label">Active</label>
+                            <p-dropdown class="p-inputtext-sm w-100" formControlName="active"
+                                [options]="[{label:'Active', value:'1'},{label:'Inactive', value:'0'}]"
+                                optionLabel="label" optionValue="value"></p-dropdown>
+                            <div class="text-danger"
+                                *ngIf="productForm.get('active')?.dirty ||productForm.get('active')?.touched">
+                                <div [hidden]="!productForm.get('active')?.errors?.['required']">
+                                    Active is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <!-- Price -->
+                        <div class="mb-3">
+                            <label class="form-label">Price</label>
+                            <input type="text" formControlName="price" class="form-control" placeholder="Price">
+                            <div class="text-danger"
+                                *ngIf="productForm.get('price')?.dirty ||productForm.get('price')?.touched">
+                                <div [hidden]="!productForm.get('price')?.errors?.['required']">
+                                    Price is required
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Branch -->
+                        <div class="mb-3" formGroupName="branch">
+                            <label class="form-label">Branch</label>
+                            <p-dropdown class="p-inputtext-sm w-100" [options]="branches" formControlName="id"
+                                optionLabel="name" optionValue="id" placeholder="Select Branch"></p-dropdown>
+                            <div class="text-danger"
+                                *ngIf="productForm.get('branch')?.dirty ||productForm.get('branch')?.touched">
+                                <div [hidden]="!productForm.get('branch')?.errors?.['required']">
+                                    Branch is required
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-sidebar>
+
+<p-sidebar styleClass="p-sidebar-md" position="right">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>Product Detail</h2>
+        </div>
+        <div class="col text-end">
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">
+                {{productForm.get('product.id')?.value ? 'Update ': 'Save'}}
+            </button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+
+    </ng-template>
+</p-sidebar>

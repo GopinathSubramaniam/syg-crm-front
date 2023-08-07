@@ -1,0 +1,202 @@
+<div class="page-body">
+    <div class="container">
+        <div class="row">
+            <div class="col mb-2 text-end">
+                <button class="btn btn-danger"  *ngIf="appService.isSuperAdmin()" (click)="deleteConfirm($event)">Delete</button>
+                <button class="btn btn-primary" *ngIf="appService.isSuperAdmin()" (click)="sidebarVisible = true">New
+                    Branch</button>
+            </div>
+        </div>
+        <div class="row">
+            <!--  <div class="col-2">
+                <div class="card h-100">
+                    <div class="card-body p-0">
+                        <div class="p-3">
+                            <h4>FILTERS</h4>
+                            <div class="input-icon">
+                                <span class="input-icon-addon">
+                                    <span class="mdi mdi-magnify"></span>
+                                </span>
+                                <input type="text" value="" class="form-control" placeholder="Search…"
+                                    aria-label="Search in website">
+                            </div>
+                        </div>
+                        <div>
+                            <div class="accordion" id="accordion-example">
+                                <div class="accordion-item border-0">
+                                    <h2 class="accordion-header" id="heading-1">
+                                        <button class="accordion-button " type="button" data-bs-toggle="collapse"
+                                            data-bs-target="#collapse-1" aria-expanded="true">
+                                            System Defined Filters
+                                        </button>
+                                    </h2>
+                                    <div id="collapse-1" class="accordion-collapse collapse show"
+                                        data-bs-parent="#accordion-example">
+                                        <div class="accordion-body pt-0">
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox" checked="">
+                                                <span class="form-check-label">Touched Records</span>
+                                            </label>
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                                <span class="form-check-label">Untouched Records</span>
+                                            </label>
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                                <span class="form-check-label">Won</span>
+                                            </label>
+                                            <label class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                                <span class="form-check-label">Loss</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="col-3 mb-3" *ngFor="let b of branches">
+                <div class="card">
+                    <div class="card-body p-2">
+                        <div class="row">
+                            <div class="col-1">
+                                <p-checkbox [value]="b.id" name="branchCheckbox"
+                                    [(ngModel)]="selectedRows"></p-checkbox>
+                            </div>
+                            <div class="col ms-1">
+                                <h3>{{b.name ? b.name : b.city}}</h3>
+                                <h6 class="card-subtitle mb-2 text-muted">12 Employees</h6>
+                                <h3><i>Branch Contact Details</i></h3>
+                                <table class="table">
+                                    <tr>
+                                        <td>Contact Person: </td>
+                                        <td>{{b.contactPerson ? b.contactPerson : '-'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mobile: </td>
+                                        <td>{{b.mobile ? b.mobile : '-'}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Email: </td>
+                                        <td>{{b.email ? b.email : '-'}}</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="row" *ngIf="appService.isSuperAdmin()">
+                            <div class="col text-end">
+                                <button class="btn btn-primary btn-sm" (click)="edit(b.id)">
+                                    <span class="mdi mdi-pencil"></span>
+                                    &nbsp;Edit
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="sidebarVisible" position="right" (onHide)="branchForm.reset()">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>New Branch</h2>
+        </div>
+        <div class="col text-end">
+            <!-- <button type=" button" class="btn btn-secondary" (click)="sidebarVisible = false">Cancel</button> -->
+            <button type="button" class="btn btn-primary" (click)="onSubmit();">Save</button>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <form [formGroup]="branchForm" class="form mt-4" autocomplete="off" novalidate>
+            <div class="row">
+                <div class="col">
+                    <input type="hidden" formControlName="id">
+                    <div class="mb-3">
+                        <label class="form-label"> Mobile</label>
+                        <input type="text" formControlName="mobile" class="form-control" placeholder="Mobile">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('mobile')?.dirty ||branchForm.get('mobile')?.touched">
+                            <div [hidden]="!branchForm.get('mobile')?.errors?.['required']">
+                                Mobile is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Contact Person</label>
+                        <input type="text" formControlName="contactPerson" class="form-control"
+                            placeholder="Contact Person">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('contactPerson')?.dirty ||branchForm.get('contactPerson')?.touched">
+                            <div [hidden]="!branchForm.get('contactPerson')?.errors?.['required']">
+                                Contact person is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">State</label>
+                        <input type="text" formControlName="state" class="form-control" placeholder="State">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('state')?.dirty ||branchForm.get('state')?.touched">
+                            <div [hidden]="!branchForm.get('state')?.errors?.['required']">
+                                State is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Country</label>
+                        <select formControlName="country" class="form-control">
+                            <option value="IN" selected>India</option>
+                            <option>Qatar</option>
+                            <option>UAE</option>
+                            <option>United States America</option>
+                            <option>Dubai</option>
+                        </select>
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('country')?.dirty ||branchForm.get('country')?.touched">
+                            <div [hidden]="!branchForm.get('country')?.errors?.['required']">
+                                Country is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="mb-3">
+                        <label class="form-label">Branch Name</label>
+                        <input type="text" formControlName="name" class="form-control" placeholder="Branch Name">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('name')?.dirty ||branchForm.get('name')?.touched">
+                            <div [hidden]="!branchForm.get('name')?.errors?.['required']">
+                                Name is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input type="text" formControlName="email" class="form-control" placeholder="Email">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('email')?.dirty ||branchForm.get('email')?.touched">
+                            <div [hidden]="!branchForm.get('email')?.errors?.['required']">
+                                Email is required
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">City</label>
+                        <input type="text" formControlName="city" class="form-control" placeholder="City">
+                        <div class="text-danger"
+                            *ngIf="branchForm.get('city')?.dirty ||branchForm.get('city')?.touched">
+                            <div [hidden]="!branchForm.get('city')?.errors?.['required']">
+                                City is required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-template>
+</p-sidebar>
