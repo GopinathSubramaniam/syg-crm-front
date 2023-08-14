@@ -13,6 +13,7 @@ import { AppService } from '../app.service';
 })
 export class LandingPageComponent {
 
+  static dialog = { visible: false, content: '' };
   loginDetail: any = { userName: '', branchName: '' };
   activeMenu: string = '';
   items: MenuItem[] = [
@@ -62,6 +63,10 @@ export class LandingPageComponent {
         this.router.navigateByUrl('login');
       });
     }
+  }
+
+  getDialog() {
+    return LandingPageComponent.dialog;
   }
 
 }

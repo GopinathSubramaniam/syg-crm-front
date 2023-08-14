@@ -127,10 +127,14 @@
                                         </span>
                                     </td>
                                     <td class="fs-4">
-                                        <button class="btn btn-sm btn-primary px-2" (click)="edit(task.id)"
+                                        <button class="btn btn-sm btn-secondary px-2" (click)="edit(task.id)"
                                             *ngIf="appService.isSuperAdmin() || (appService.isAdmin() && appService.isSameUserDetail(task.userDetail.id))">
                                             <span class="mdi mdi-circle-edit-outline"></span>&nbsp;
                                             Edit
+                                        </button>
+                                        <button class="btn btn-sm btn-primary px-2" (click)="view(task.id)">
+                                            <span class="mdi mdi-open-in-new"></span>&nbsp;
+                                            View
                                         </button>
                                     </td>
                                 </tr>
@@ -254,3 +258,80 @@
         </form>
     </ng-template>
 </p-sidebar>
+
+
+<!-- <> View detail information -->
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="taskDetail" position="right">
+    <ng-template pTemplate="header" class="row">
+        <div class="col">
+            <h2>
+                Task Infromation
+                <span *ngIf="taskDetail.task.status == 'O'"></span>
+                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="taskDetail.task.status == 'L'"></span>
+                <span class="mdi mdi-checkbox-marked-circle-auto-outline text-warning"
+                    *ngIf="taskDetail.task.status == 'N'"></span>
+            </h2>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="row">
+            <div class="col">
+                <table class="table table-sm">
+                    <tr class="p-2">
+                        <td class="text-end pb-4 col-4">Task Owner</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.userDetail.firstName}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">Subject</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.subject}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">Start Date</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.startDate | date: 'YYYY-MM-dd'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">Due Date</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.dueDate | date: 'YYYY-MM-dd'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">End Date</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.endDate | date: 'YYYY-MM-dd'}}</td>
+                    </tr>
+                    <tr>
+                        <td class="vertical-align-top text-end pb-4 col-4">Priority</td>
+                        <td class="ps-4 pb-4">
+                            <span class="badge badge-outline"
+                                [class]="[getPriority(taskDetail.task.priority).className]">
+                                {{getPriority(taskDetail.task.priority).label}}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">Status</td>
+                        <td class="ps-4 pb-4">
+                            <span class="badge badge-outline" [class]="[getStatus(taskDetail.task.status).className]">
+                                {{getStatus(taskDetail.task.status).label}}
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-end pb-4 col-4">Description</td>
+                        <td class="ps-4 pb-4">{{taskDetail.task.description}}</td>
+                    </tr>
+                    <tr *ngIf="taskDetail.leads && taskDetail.leads.length > 0">
+                        <td class="vertical-align-top text-end pb-4 col-4">Leads</td>
+                        <td class="vertical-align-top ps-4 pb-4">
+                            <ul *ngFor="let l of taskDetail.leads">
+                                <li>
+                                    <a class="pt-0" routerLink="{{l.id}}">{{l.firstName}} {{l.lastName}}<br />
+                                        {{l.mobile}}</a><br>
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </ng-template>
+</p-sidebar>
+<!-- </> View detail information -->

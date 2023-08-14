@@ -18,6 +18,8 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { HighchartsChartModule } from 'highcharts-angular';
+import { TabViewModule } from 'primeng/tabview';
+import { EllipsePipe } from '../pipes/ellipse.pipe';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BranchComponent } from './branch/branch.component';
@@ -42,7 +44,8 @@ import { ProductComponent } from './product/product.component';
     CallComponent,
     TaskComponent,
     MeetingComponent,
-    ProductComponent
+    ProductComponent,
+    EllipsePipe
   ],
   imports: [
     CommonModule,
@@ -65,7 +68,8 @@ import { ProductComponent } from './product/product.component';
     RadioButtonModule,
     DialogModule,
     TagModule,
-    HighchartsChartModule
+    HighchartsChartModule,
+    TabViewModule
   ]
 })
 export class LandingPageModule { }

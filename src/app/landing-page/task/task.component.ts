@@ -18,7 +18,7 @@ export class TaskComponent {
   loading: any = true;
   selectedRows: any;
   @ViewChild(Table) table!: Table;
-
+  taskDetail!: any;
 
   submitted: boolean = false;
 
@@ -98,6 +98,12 @@ export class TaskComponent {
     task.dueDate = new Date(task.dueDate);
     this.taskForm.patchValue(task);
     this.sidebarVisible = true;
+  }
+
+  view(id: string) {
+    this.taskService.findTask(id).subscribe((res: any) => {
+      this.taskDetail = res.data;
+    });
   }
 
   getStatus(val: any) {

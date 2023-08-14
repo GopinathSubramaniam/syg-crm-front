@@ -287,70 +287,122 @@
 
 
 <!-- <> View lead information -->
-<p-sidebar styleClass="p-sidebar-md" [(visible)]="leadInfoSidebarVisible" position="right">
+<p-sidebar styleClass="p-sidebar-lg" [(visible)]="leadInfoSidebarVisible" position="right">
     <ng-template pTemplate="header" class="row">
         <div class="col">
             <h2>
                 Lead Infromation
-                <span class="mdi mdi-check-circle text-success" *ngIf="selectedLead.lead.status == 'O'"></span>
-                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="selectedLead.lead.status == 'L'"></span>
-                <span class="mdi mdi-checkbox-marked-circle-auto-outline text-warning" *ngIf="selectedLead.lead.status == 'N'"></span>
+                <span class="mdi mdi-check-circle text-success" *ngIf="selectedLead?.lead.status == 'O'"></span>
+                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="selectedLead?.lead.status == 'L'"></span>
+                <span class="mdi mdi-checkbox-marked-circle-auto-outline"
+                    *ngIf="selectedLead?.lead.status == 'N'"></span>
             </h2>
         </div>
     </ng-template>
     <ng-template pTemplate="content">
-        <div class="row">
-            <div class="col">
-                <table class="table table-sm">
-                    <tr class="p-2">
-                        <td class="text-end pb-4">Lead Owner</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.firstName}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Name</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.firstName}} {{selectedLead.lead.lastName}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Email</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.email}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Mobile</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.mobile}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Lead Source</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.leadSource}}</td>
-                    </tr>
-                    <tr>
-                        <td class="vertical-align-top text-end pb-4">Address</td>
-                        <td class="ps-4 pb-4">
-                            <span *ngIf="selectedLead.lead.street">{{selectedLead.lead.street}},<br></span>
-                            <span>{{selectedLead.lead.city}} - {{selectedLead.lead.zip}},</span><br>
-                            <span>{{selectedLead.lead.state}}, {{selectedLead.lead.country}}</span><br>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Description</td>
-                        <td class="ps-4 pb-4">
-                            {{selectedLead.lead.description}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4">Tags</td>
-                        <td class="ps-4 pb-4">{{selectedLead.lead.tags}}</td>
-                    </tr>
-                    <tr>
-                        <td class="vertical-align-top text-end pb-4">Tasks</td>
-                        <td class="vertical-align-top ps-4 pb-4">
-                            <div *ngFor="let t of selectedLead.tasks">
-                                <a class="pt-0" routerLink="{{t.taskNum}}">{{t.taskNum}} - {{t.subject}}</a><br>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+
+        <p-tabView>
+            <p-tabPanel header="Information">
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-sm">
+                            <tr class="p-2">
+                                <td class="text-end pb-4">Lead Owner</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Name</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.firstName}} {{selectedLead?.lead.lastName}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Email</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.email}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Mobile</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.mobile}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Lead Source</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.leadSource}}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical-align-top text-end pb-4">Address</td>
+                                <td class="ps-4 pb-4">
+                                    <span *ngIf="selectedLead?.lead.street">{{selectedLead?.lead.street}},<br></span>
+                                    <span>{{selectedLead?.lead.city}} - {{selectedLead?.lead.zip}},</span><br>
+                                    <span>{{selectedLead?.lead.state}}, {{selectedLead?.lead.country}}</span><br>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Description</td>
+                                <td class="ps-4 pb-4">
+                                    {{selectedLead?.lead.description}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4">Tags</td>
+                                <td class="ps-4 pb-4">{{selectedLead?.lead.tags}}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical-align-top text-end pb-4">Tasks</td>
+                                <td class="vertical-align-top ps-4 pb-4">
+                                    <div *ngFor="let t of selectedLead?.tasks">
+                                        <a class="pt-0" routerLink="{{t.taskNum}}">{{t.taskNum}} - {{t.subject}}</a><br>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Tasks">
+                <p-table [value]="selectedLead?.tasks">
+                    <ng-template pTemplate="body" let-t>
+                        <tr>
+                            <td>
+                                <a class="pt-0" routerLink="{{t.taskNum}}">{{t.taskNum}} - {{t.subject}}</a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+            <p-tabPanel header="History">
+                <p-table [value]="selectedLead?.history">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Date</th>
+                            <th>Modified By</th>
+                            <th>Name</th>
+                            <th>Operation</th>
+                            <th>Value</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-h>
+                        <tr>
+                            <td>
+                                {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}
+                            </td>
+                            <td>
+                                {{h.createdBy}}
+                            </td>
+                            <td>
+                                {{h.name}}
+                            </td>
+                            <td>
+                                <span class="text-primary" *ngIf="h.operation == 'C'">Create</span>
+                                <span class="text-warning" *ngIf="h.operation == 'U'">Update</span>
+                                <span class="text-danger" *ngIf="h.operation == 'D'">Delete</span>
+                            </td>
+                            <td>
+                                <a href="javascript:void(0)" (click)="viewValue(h.id)">{{h.value | ellipse}}</a>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </p-tabPanel>
+        </p-tabView>
     </ng-template>
 </p-sidebar>
 <!-- </> View lead information -->

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AppComponent } from './app.component';
+import { LandingPageComponent } from './landing-page/landing-page.component';
 
 @Injectable({
   providedIn: 'root',
@@ -85,6 +86,11 @@ export class AppService {
     const dte = `${year}-${month}-${date}`;
 
     return dte;
+  }
+
+  toggleDialog(content: string) {
+    LandingPageComponent.dialog.visible = !LandingPageComponent.dialog.visible;
+    LandingPageComponent.dialog.content = content;
   }
 
 }

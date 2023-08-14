@@ -254,4 +254,13 @@ export class LeadComponent implements OnInit {
     }
   }
 
+
+  viewValue(id: any) {
+    const o = this.selectedLead.history.find((o: any) => {
+      return o.id == id;
+    });
+
+    this.appService.toggleDialog(o.value);
+  }
+
 }
