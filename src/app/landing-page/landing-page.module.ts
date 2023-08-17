@@ -19,6 +19,9 @@ import { DialogModule } from 'primeng/dialog';
 import { TagModule } from 'primeng/tag';
 import { HighchartsChartModule } from 'highcharts-angular';
 import { TabViewModule } from 'primeng/tabview';
+import { TimelineModule } from 'primeng/timeline';
+import { BadgeModule } from 'primeng/badge';
+
 import { EllipsePipe } from '../pipes/ellipse.pipe';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -69,7 +72,9 @@ import { ProductComponent } from './product/product.component';
     DialogModule,
     TagModule,
     HighchartsChartModule,
-    TabViewModule
+    TabViewModule,
+    TimelineModule,
+    BadgeModule
   ]
 })
 export class LandingPageModule { }

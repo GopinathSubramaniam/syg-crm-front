@@ -13,7 +13,7 @@ import { AppService } from '../app.service';
 })
 export class LandingPageComponent {
 
-  static dialog = { visible: false, content: '' };
+  static dialog = { visible: false, content: '', header: '' };
   loginDetail: any = { userName: '', branchName: '' };
   activeMenu: string = '';
   items: MenuItem[] = [

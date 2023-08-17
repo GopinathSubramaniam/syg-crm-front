@@ -367,40 +367,25 @@
                         </tr>
                     </ng-template>
                 </p-table>
+                <h3 class="text-center" *ngIf="selectedLead?.tasks.length == 0">No Tasks!!</h3>
             </p-tabPanel>
             <p-tabPanel header="History">
-                <p-table [value]="selectedLead?.history">
-                    <ng-template pTemplate="header">
-                        <tr>
-                            <th>Date</th>
-                            <th>Modified By</th>
-                            <th>Name</th>
-                            <th>Operation</th>
-                            <th>Value</th>
-                        </tr>
+                <p-timeline [value]="selectedLead?.history" align="alternate">
+                    <ng-template pTemplate="content" let-h>
+                        <span class="text-primary" *ngIf="h.operation == 'C'">
+                            <p-badge value="Create" severity="success"></p-badge>
+                        </span>
+                        <span class="text-warning" *ngIf="h.operation == 'U'">
+                            <p-badge value="Update" severity="warning"></p-badge>
+                        </span>
+                        <span class="text-danger" *ngIf="h.operation == 'D'">
+                            <p-badge value="Delete" severity="danger"></p-badge>
+                        </span><br />
+                        {{h.createdBy}}, {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}<br />
+                        {{h.name}} - <a href="javascript:void(0)" (click)="viewValue(h.id)">{{h.value | ellipse}}</a>
+                        <div class="mb-4"></div>
                     </ng-template>
-                    <ng-template pTemplate="body" let-h>
-                        <tr>
-                            <td>
-                                {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}
-                            </td>
-                            <td>
-                                {{h.createdBy}}
-                            </td>
-                            <td>
-                                {{h.name}}
-                            </td>
-                            <td>
-                                <span class="text-primary" *ngIf="h.operation == 'C'">Create</span>
-                                <span class="text-warning" *ngIf="h.operation == 'U'">Update</span>
-                                <span class="text-danger" *ngIf="h.operation == 'D'">Delete</span>
-                            </td>
-                            <td>
-                                <a href="javascript:void(0)" (click)="viewValue(h.id)">{{h.value | ellipse}}</a>
-                            </td>
-                        </tr>
-                    </ng-template>
-                </p-table>
+                </p-timeline>
             </p-tabPanel>
         </p-tabView>
     </ng-template>
