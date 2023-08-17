@@ -372,8 +372,8 @@
             <p-tabPanel header="History">
                 <p-timeline [value]="selectedLead?.history" align="alternate">
                     <ng-template pTemplate="content" let-h>
-                        <span class="text-primary" *ngIf="h.operation == 'C'">
-                            <p-badge value="Create" severity="success"></p-badge>
+                        <span class="text-primary" *ngIf="h.operation == 'I'">
+                            <p-badge value="Insert" severity="success"></p-badge>
                         </span>
                         <span class="text-warning" *ngIf="h.operation == 'U'">
                             <p-badge value="Update" severity="warning"></p-badge>
