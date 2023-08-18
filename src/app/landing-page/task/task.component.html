@@ -261,77 +261,102 @@
 
 
 <!-- <> View detail information -->
-<p-sidebar styleClass="p-sidebar-md" [(visible)]="taskDetail" position="right">
+<p-sidebar styleClass="p-sidebar-md" [(visible)]="taskDetailSideBar" position="right">
     <ng-template pTemplate="header" class="row">
         <div class="col">
             <h2>
                 Task Infromation
-                <span *ngIf="taskDetail.task.status == 'O'"></span>
-                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="taskDetail.task.status == 'L'"></span>
+                <span *ngIf="taskDetail.task?.status == 'TD'"></span>
+                <span class="mdi mdi-close-box-multiple text-danger" *ngIf="taskDetail.task?.status == 'IP'"></span>
                 <span class="mdi mdi-checkbox-marked-circle-auto-outline text-warning"
-                    *ngIf="taskDetail.task.status == 'N'"></span>
+                    *ngIf="taskDetail.task?.status == 'C'"></span>
             </h2>
         </div>
     </ng-template>
     <ng-template pTemplate="content">
-        <div class="row">
-            <div class="col">
-                <table class="table table-sm">
-                    <tr class="p-2">
-                        <td class="text-end pb-4 col-4">Task Owner</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.userDetail.firstName}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">Subject</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.subject}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">Start Date</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.startDate | date: 'YYYY-MM-dd'}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">Due Date</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.dueDate | date: 'YYYY-MM-dd'}}</td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">End Date</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.endDate | date: 'YYYY-MM-dd'}}</td>
-                    </tr>
-                    <tr>
-                        <td class="vertical-align-top text-end pb-4 col-4">Priority</td>
-                        <td class="ps-4 pb-4">
-                            <span class="badge badge-outline"
-                                [class]="[getPriority(taskDetail.task.priority).className]">
-                                {{getPriority(taskDetail.task.priority).label}}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">Status</td>
-                        <td class="ps-4 pb-4">
-                            <span class="badge badge-outline" [class]="[getStatus(taskDetail.task.status).className]">
-                                {{getStatus(taskDetail.task.status).label}}
-                            </span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-end pb-4 col-4">Description</td>
-                        <td class="ps-4 pb-4">{{taskDetail.task.description}}</td>
-                    </tr>
-                    <tr *ngIf="taskDetail.leads && taskDetail.leads.length > 0">
-                        <td class="vertical-align-top text-end pb-4 col-4">Leads</td>
-                        <td class="vertical-align-top ps-4 pb-4">
-                            <ul *ngFor="let l of taskDetail.leads">
-                                <li>
-                                    <a class="pt-0" routerLink="{{l.id}}">{{l.firstName}} {{l.lastName}}<br />
-                                        {{l.mobile}}</a><br>
-                                </li>
-                            </ul>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </div>
+        <p-tabView>
+            <p-tabPanel header="Detail">
+                <div class="row">
+                    <div class="col">
+                        <table class="table table-sm">
+                            <tr class="p-2">
+                                <td class="text-end pb-4 col-4">Task Owner</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.userDetail.firstName}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">Subject</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.subject}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">Start Date</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.startDate | date: 'YYYY-MM-dd'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">Due Date</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.dueDate | date: 'YYYY-MM-dd'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">End Date</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.endDate | date: 'YYYY-MM-dd'}}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical-align-top text-end pb-4 col-4">Priority</td>
+                                <td class="ps-4 pb-4">
+                                    <span class="badge badge-outline"
+                                        [class]="[getPriority(taskDetail.task?.priority).className]">
+                                        {{getPriority(taskDetail.task?.priority).label}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">Status</td>
+                                <td class="ps-4 pb-4">
+                                    <span class="badge badge-outline"
+                                        [class]="[getStatus(taskDetail.task?.status).className]">
+                                        {{getStatus(taskDetail.task?.status).label}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-end pb-4 col-4">Description</td>
+                                <td class="ps-4 pb-4">{{taskDetail.task?.description}}</td>
+                            </tr>
+                            <tr *ngIf="taskDetail.leads && taskDetail.leads?.length > 0">
+                                <td class="vertical-align-top text-end pb-4 col-4">Leads</td>
+                                <td class="vertical-align-top ps-4 pb-4">
+                                    <ul *ngFor="let l of taskDetail.leads">
+                                        <li>
+                                            <a class="pt-0" routerLink="{{l.id}}">{{l.firstName}} {{l.lastName}}<br />
+                                                {{l.mobile}}</a><br>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Comments">
+                <div class="text-right">
+                    <textarea class="form-control" placeholder="Enter your comment" [(ngModel)]="newComment"></textarea>
+                    <button class="btn btn-primary btn-sm" (click)="addComment()">Add Comment</button>
+                </div>
+
+                <div *ngIf="(taskDetail.comments && taskDetail.comments.length > 0); else noCommentsDiv">
+                    <p-card *ngFor="let c of taskDetail.comments"
+                        subheader="{{'Posted by '+c.createdBy+' at '+ (c.createdDate | date:'MM/dd/yy, h:mm a')}}" styleClass="my-2">
+                        {{c.comment}}
+                    </p-card>
+                </div>
+                <ng-template #noCommentsDiv>
+                    <h3>No Comments Found!!</h3>
+                </ng-template>
+            </p-tabPanel>
+            <p-tabPanel header="History">
+                123123
+            </p-tabPanel>
+        </p-tabView>
+
     </ng-template>
 </p-sidebar>
 <!-- </> View detail information -->

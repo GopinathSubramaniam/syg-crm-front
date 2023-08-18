@@ -16,6 +16,10 @@ export class TaskService {
     return this.http.post('/task', data);
   }
 
+  addComment(data: any) {
+    return this.http.post('/task/comment', data);
+  }
+
   findAll(pageNo: any, perPage: any, filter: any) {
     let url = `/task?pageNo=${pageNo}&perPage=${perPage}&searchTxt=${filter.searchTxt}&status=${filter.status}&priority=${filter.priority}`;
 

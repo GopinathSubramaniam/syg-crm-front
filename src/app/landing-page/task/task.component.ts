@@ -15,6 +15,8 @@ export class TaskComponent {
   tasks = { totalRecords: 0, data: [] };
   filter = { searchTxt: '', status: 'IP', priority: '3', dateRanges: <any>[] };
   sidebarVisible: boolean = false;
+  taskDetailSideBar: boolean = false;
+  newComment!: string;
   loading: any = true;
   selectedRows: any;
   @ViewChild(Table) table!: Table;
@@ -103,6 +105,7 @@ export class TaskComponent {
   view(id: string) {
     this.taskService.findTask(id).subscribe((res: any) => {
       this.taskDetail = res.data;
+      this.taskDetailSideBar = true;
     });
   }
 
@@ -112,6 +115,17 @@ export class TaskComponent {
 
   getPriority(val: any) {
     return Util.getPriorityObj(val);
+  }
+
+  addComment() {
+    this.appService.showSpinner();
+    const o = { comment: this.newComment, task: { id: this.taskDetail.task.id } };
+    this.taskService.addComment(o).subscribe((res: any) => {
+      this.newComment = '';
+      this.appService.hideSpinner();
+      this.appService.successToast('Success', 'Comment added successfully!!');
+      this.view(this.taskDetail.task.id);
+    });
   }
 
 

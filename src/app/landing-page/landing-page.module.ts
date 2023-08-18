@@ -21,6 +21,7 @@ import { HighchartsChartModule } from 'highcharts-angular';
 import { TabViewModule } from 'primeng/tabview';
 import { TimelineModule } from 'primeng/timeline';
 import { BadgeModule } from 'primeng/badge';
+import { CardModule } from 'primeng/card';
 
 import { EllipsePipe } from '../pipes/ellipse.pipe';
 
@@ -74,7 +75,8 @@ import { ProductComponent } from './product/product.component';
     HighchartsChartModule,
     TabViewModule,
     TimelineModule,
-    BadgeModule
+    BadgeModule,
+    CardModule
   ]
 })
 export class LandingPageModule { }
