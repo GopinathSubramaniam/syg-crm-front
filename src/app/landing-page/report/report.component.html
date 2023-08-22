@@ -1,0 +1,24 @@
+<div class="page-body">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col mb-2">
+                <p-calendar [(ngModel)]="rangeDates" selectionMode="range" [readonlyInput]="true" [showIcon]="true"
+                    class="p-calendar-custom" placeholder="Select Date Range"></p-calendar>
+
+                <p-dropdown [options]="reportOptions" placeholder="Select a Report" [editable]="true"
+                    optionLabel="label">
+                    <ng-template let-r pTemplate="item">
+                        <div class="flex align-items-center gap-2">
+                            <div><i [class]="r.icon"></i> {{ r.label }}</div>
+                        </div>
+                    </ng-template>
+                </p-dropdown>
+
+                <p-button label="View Report" styleClass="p-button-sm p-btn-gap"></p-button>
+            </div>
+        </div>
+        <div class="row">
+
+        </div>
+    </div>
+</div>

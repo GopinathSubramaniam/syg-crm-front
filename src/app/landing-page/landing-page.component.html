@@ -6,9 +6,9 @@
                 <span class="navbar-toggler-icon"></span>
             </button>
             <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
-                <a href="#" routerLink="/auth/dashboard">
-                    AL-HIND CRM
-                </a>
+                <span routerLink="/home" class="pointer">
+                    SYNERGY
+                </span>
             </h1>
             <div class="navbar-nav flex-row order-md-last">
                 <p-toast></p-toast>
@@ -111,7 +111,7 @@
                                     <span class="mdi mdi-cube"></span>
                                 </span>
                                 <span class="nav-link-title">
-                                    Packages
+                                    Products
                                 </span>
                             </a>
                         </li>
@@ -152,8 +152,8 @@
 <p-confirmPopup></p-confirmPopup>
 
 <div class="card flex justify-content-center">
-    <p-dialog [header]="getDialog().header" [(visible)]="getDialog().visible" [modal]="true" [draggable]="false" [resizable]="false"
-        [style]="{width: '30vw'}">
+    <p-dialog [header]="getDialog().header" [(visible)]="getDialog().visible" [modal]="true" [draggable]="false"
+        [resizable]="false" [style]="{width: '30vw'}">
         <p class="m-0">{{getDialog().content}}</p>
     </p-dialog>
 </div>

@@ -36,6 +36,8 @@ import { MeetingComponent } from './meeting/meeting.component';
 import { TaskComponent } from './task/task.component';
 import { UserComponent } from './user/user.component';
 import { ProductComponent } from './product/product.component';
+import { ReportComponent } from './report/report.component';
+
 
 
 @NgModule({
@@ -49,6 +51,7 @@ import { ProductComponent } from './product/product.component';
     TaskComponent,
     MeetingComponent,
     ProductComponent,
+    ReportComponent,
     EllipsePipe
   ],
   imports: [

@@ -40,7 +40,7 @@ export class LoginComponent {
           localStorage.setItem('branchName', res.data.userDetail.branch.name);
           localStorage.setItem('companyId', res.data.userDetail.branch.company.id);
 
-          this.appService.navigate('/auth/dashboard');
+          this.appService.navigate('/home');
         } else {
           let msg = res.statusMsg ? res.statusMsg : 'Something went wrong. Please try again later';
           this.appService.errorToast('Error', msg);

@@ -7,9 +7,10 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { LandingPageComponent } from './landing-page.component';
 import { LeadComponent } from './lead/lead.component';
 import { MeetingComponent } from './meeting/meeting.component';
+import { ProductComponent } from './product/product.component';
+import { ReportComponent } from './report/report.component';
 import { TaskComponent } from './task/task.component';
 import { UserComponent } from './user/user.component';
-import { ProductComponent } from './product/product.component';
 
 const routes: Routes = [
   {
@@ -63,6 +64,12 @@ const routes: Routes = [
         path: 'product',
         component: ProductComponent,
         data: { menuId: 'product' },
+        canActivate: [AuthGuardService]
+      },
+      {
+        path: 'report',
+        component: ReportComponent,
+        data: { menuId: 'report' },
         canActivate: [AuthGuardService]
       }
     ]

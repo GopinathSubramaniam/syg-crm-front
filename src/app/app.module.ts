@@ -8,7 +8,8 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { BlockUIModule } from 'primeng/blockui';
-
+import { MenuModule } from 'primeng/menu';
+import { CardModule } from 'primeng/card';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,13 +18,15 @@ import { RegisterComponent } from './register/register.component';
 import { HttpErrorInterceptor } from './config/http-error.interceptor';
 import { MessageService, ConfirmationService } from 'primeng/api';
 import { AuthGuardService } from './config/auth-guard.service';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
@@ -36,7 +39,9 @@ import { AuthGuardService } from './config/auth-guard.service';
     ProgressSpinnerModule,
     DialogModule,
     ButtonModule,
-    BlockUIModule
+    BlockUIModule,
+    MenuModule,
+    CardModule
   ],
   providers: [AuthGuardService, { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     ConfirmationService, MessageService],

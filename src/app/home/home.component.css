@@ -1,0 +1,13 @@
+.home-fs-5 {
+    font-size: 5rem !important;
+}
+
+.p-card .p-card-content,
+.p-card .p-card-body {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.fs-2 {
+    font-size: 2rem !important;
+}

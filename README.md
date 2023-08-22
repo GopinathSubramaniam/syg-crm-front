@@ -28,3 +28,5 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 ng g m landing-page --routing=true && ng g c landing-page --skip-tests=true -m=landing-page
+
+ng g m landing-page/report --routing=true && ng g c landing-page/report --skip-tests=true -m=report

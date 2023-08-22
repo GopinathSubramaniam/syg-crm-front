@@ -343,17 +343,39 @@
                 </div>
 
                 <div *ngIf="(taskDetail.comments && taskDetail.comments.length > 0); else noCommentsDiv">
-                    <p-card *ngFor="let c of taskDetail.comments"
-                        subheader="{{'Posted by '+c.createdBy+' at '+ (c.createdDate | date:'MM/dd/yy, h:mm a')}}" styleClass="my-2">
+                    <div *ngFor="let c of taskDetail.comments">
+                        <small class="text-secondary mb-4">
+                            {{'Posted by '+c.createdBy+' at '+ (c.createdDate | date:'MM/dd/yy, h:mm a')}}</small><br />
                         {{c.comment}}
-                    </p-card>
+                        <hr class="my-3" />
+                    </div>
                 </div>
                 <ng-template #noCommentsDiv>
                     <h3>No Comments Found!!</h3>
                 </ng-template>
             </p-tabPanel>
             <p-tabPanel header="History">
-                123123
+                <div *ngIf="(taskDetail.histories && taskDetail.histories.length == 0)">
+                    No History Found!!
+                </div>
+                <p-timeline [value]="taskDetail?.histories" align="left">
+                    <ng-template pTemplate="content" let-h>
+                        <b>{{h.field}}</b><br /> <span [innerHTML]="h.value"></span>
+                        <div class="mb-4"></div>
+                    </ng-template>
+                    <ng-template pTemplate="opposite" let-h>
+                        {{h.createdBy}}, {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}<br />
+                        <span class="text-primary" *ngIf="h.operation == 'I'">
+                            <p-badge value="Insert" severity="success"></p-badge>
+                        </span>
+                        <span class="text-warning" *ngIf="h.operation == 'U'">
+                            <p-badge value="Update" severity="warning"></p-badge>
+                        </span>
+                        <span class="text-danger" *ngIf="h.operation == 'D'">
+                            <p-badge value="Delete" severity="danger"></p-badge>
+                        </span>
+                    </ng-template>
+                </p-timeline>
             </p-tabPanel>
         </p-tabView>
 

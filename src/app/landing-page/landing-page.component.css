@@ -33,3 +33,8 @@ header .p-dropdown .p-dropdown-trigger {
     height: 2rem;
     font-size: .75rem !important;
 }
+
+
+.p-button.p-button-sm {
+    padding: 0.55rem 1.09375rem;
+}

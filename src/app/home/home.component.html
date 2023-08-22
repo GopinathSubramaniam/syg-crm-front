@@ -1,0 +1,84 @@
+<div style="position: fixed; z-index: 1040; width: 100%;">
+    <header class="navbar navbar-expand-md d-print-none bg-primary p-0">
+        <div class="container-xl">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu"
+                aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+                <span routerLink="/home">
+                    SYNERGY
+                </span>
+            </h1>
+            <div class="navbar-nav flex-row order-md-last">
+                <p-toast></p-toast>
+                <p-menu #menu [model]="items" [popup]="true"></p-menu>
+                <button class="btn btn-primary shadow-none p-0" (click)="menu.toggle($event)">
+                    <div class="d-flex">
+                        <a href="#" class="nav-link d-flex lh-1 text-reset p-0">
+                            <span class="mdi mdi-shield-account display-6" *ngIf="appService.isSuperAdmin()"></span>
+                            <span class="mdi mdi-account-tie display-6" *ngIf="appService.isAdmin()"></span>
+                            <span class="mdi mdi-account-circle display-6" *ngIf="appService.isEmployee()"></span>
+
+                        </a>
+                        <div class="d-none d-xl-block px-2 text-start">
+                            <div>{{loginDetail.userName}}</div>
+                            <div class="mt-1 small">{{loginDetail.branchName}}</div>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </header>
+</div>
+
+<div class="container page-wrapper h-100vh" style="margin-top: 6rem !important;">
+
+    <div class="row">
+        <div class="col">
+            <p-card>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="text-primary">
+                            <span class="mdi mdi-card-account-details-outline home-fs-5"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="fs-2 "> Staff</div>
+                        <p>Manage Employee Details, Salary, Access Permissions</p>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+        <div class="col">
+            <p-card routerLink="/auth/dashboard" class="pointer">
+                <div class="row">
+                    <div class="col-4">
+                        <div class="text-success">
+                            <span class="mdi mdi-face-agent home-fs-5"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="fs-2 "> CRM</div>
+                        <p>Manage Leads, Meetings, Calls, Products, Branches</p>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+        <div class="col">
+            <p-card>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="text-danger">
+                            <span class="mdi mdi-finance home-fs-5"></span>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="fs-2"> Sales</div>
+                        <p>Manage Customers, Invoices, Orders, Track Order</p>
+                    </div>
+                </div>
+            </p-card>
+        </div>
+    </div>
+</div>

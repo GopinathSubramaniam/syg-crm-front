@@ -148,6 +148,12 @@ buttton.btn.shadow-none {
 }
 
 
-.pointer{
+.pointer {
     cursor: pointer;
+    text-decoration: none;
+}
+
+
+.p-btn-gap {
+    margin-inline: 0.3rem;
 }

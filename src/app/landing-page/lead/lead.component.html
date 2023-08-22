@@ -366,11 +366,17 @@
                         </tr>
                     </ng-template>
                 </p-table>
-                <h3 class="text-center" *ngIf="selectedLead?.tasks.length == 0">No Tasks!!</h3>
+                <div *ngIf="selectedLead?.tasks.length == 0">No Tasks!!</div>
             </p-tabPanel>
             <p-tabPanel header="History">
-                <p-timeline [value]="selectedLead?.history" align="alternate">
+                <div *ngIf="selectedLead?.history.length == 0">No History Available</div>
+                <p-timeline [value]="selectedLead?.history" align="left">
                     <ng-template pTemplate="content" let-h>
+                        {{h.name}} - <a href="javascript:void(0)" (click)="viewValue(h.id)">{{h.value | ellipse}}</a>
+                        <div class="mb-4"></div>
+                    </ng-template>
+                    <ng-template pTemplate="opposite" let-h>
+                        {{h.createdBy}}, {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}<br />
                         <span class="text-primary" *ngIf="h.operation == 'I'">
                             <p-badge value="Insert" severity="success"></p-badge>
                         </span>
@@ -379,10 +385,7 @@
                         </span>
                         <span class="text-danger" *ngIf="h.operation == 'D'">
                             <p-badge value="Delete" severity="danger"></p-badge>
-                        </span><br />
-                        {{h.createdBy}}, {{h.createdDate | date: 'MMM dd, yy HH:mm a'}}<br />
-                        {{h.name}} - <a href="javascript:void(0)" (click)="viewValue(h.id)">{{h.value | ellipse}}</a>
-                        <div class="mb-4"></div>
+                        </span>
                     </ng-template>
                 </p-timeline>
             </p-tabPanel>
@@ -468,8 +471,6 @@
                             </div>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="col">
                     <div class="mb-3">
