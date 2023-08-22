@@ -151,9 +151,7 @@
 <p-toast></p-toast>
 <p-confirmPopup></p-confirmPopup>
 
-<div class="card flex justify-content-center">
-    <p-dialog [header]="getDialog().header" [(visible)]="getDialog().visible" [modal]="true" [draggable]="false"
-        [resizable]="false" [style]="{width: '30vw'}">
-        <p class="m-0">{{getDialog().content}}</p>
-    </p-dialog>
-</div>
+<p-dialog [header]="getDialog().header" [(visible)]="getDialog().visible" [modal]="true" [draggable]="false"
+    [resizable]="false" [style]="{width: '30vw'}">
+    <p class="m-0">{{getDialog().content}}</p>
+</p-dialog>
